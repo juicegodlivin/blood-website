@@ -1,7 +1,7 @@
 {
-  "name": "erevos-dark-ops",
+  "name": "blood-liquidation-platform",
   "version": "1.0.1",
-  "description": "AI Agent Stack for Dark Operations - Unfiltered intelligence, real information, and powerful AI tools that explore beyond conventional boundaries",
+  "description": "Advanced AI-powered liquidation tracking platform providing real-time intelligence across cryptocurrency markets for modern traders and institutions",
   "main": "index.html",
   "scripts": {
     "start": "npx serve .",
@@ -9,29 +9,31 @@
     "build": "echo 'Static site - no build process required'",
     "lint": "npx eslint script.js",
     "lint:fix": "npx eslint script.js --fix",
-    "validate": "npx html-validate index.html",
+    "validate": "npx html-validate index.html liquidations.html docs.html",
     "test": "echo 'No tests specified yet'",
     "deploy": "echo 'Deploy to your preferred hosting service'"
   },
   "keywords": [
+    "cryptocurrency",
+    "liquidation",
+    "trading",
     "ai",
     "intelligence",
-    "dark-ops",
-    "security",
-    "osint",
-    "threat-intelligence",
-    "unfiltered",
-    "agent-stack"
+    "real-time",
+    "blockchain",
+    "defi",
+    "analytics",
+    "platform"
   ],
-  "author": "Erevos Intelligence",
+  "author": "Blood Analytics",
   "license": "MIT",
-  "homepage": "https://github.com/your-username/erevos-dark-ops",
+  "homepage": "https://github.com/juicegodlivin/blood-website",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-username/erevos-dark-ops.git"
+    "url": "git+https://github.com/juicegodlivin/blood-website.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/erevos-dark-ops/issues"
+    "url": "https://github.com/juicegodlivin/blood-website/issues"
   },
   "devDependencies": {
     "eslint": "^9.15.0",
