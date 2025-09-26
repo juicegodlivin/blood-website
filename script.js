@@ -1,10 +1,84 @@
 /*
- * Erevos - Dark Ops AI Intelligence - JavaScript
+ * Blood - Liquidation Intelligence Platform - JavaScript
  * Clean, accessible, performance-focused implementation
  * Focus: Progressive enhancement, accessibility, and minimal dependencies
  */
 
 'use strict';
+
+/**
+ * Page Load Animation Controller
+ * Handles the brief loading animation between page transitions
+ */
+class PageLoadController {
+  constructor() {
+    this.overlay = document.getElementById('pageLoadOverlay');
+    this.videoBackground = document.querySelector('.video-background');
+    this.video = this.videoBackground?.querySelector('video');
+    this.initializePageLoad();
+  }
+
+  initializePageLoad() {
+    // Show loading animation immediately
+    this.showLoadingAnimation();
+    
+    // Hide animation when page content and video are ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => this.handlePageReady());
+    } else {
+      this.handlePageReady();
+    }
+  }
+
+  showLoadingAnimation() {
+    if (this.overlay) {
+      this.overlay.classList.remove('fade-out');
+    }
+  }
+
+  hideLoadingAnimation() {
+    if (this.overlay) {
+      this.overlay.classList.add('fade-out');
+      // Remove from DOM after animation completes
+      setTimeout(() => {
+        if (this.overlay && this.overlay.parentNode) {
+          this.overlay.remove();
+        }
+      }, 800);
+    }
+  }
+
+  handlePageReady() {
+    // Wait for video to load if it exists
+    if (this.video) {
+      const handleVideoReady = () => {
+        this.videoBackground.classList.add('loaded');
+        // Small delay to ensure smooth transition
+        setTimeout(() => this.hideLoadingAnimation(), 300);
+      };
+
+      if (this.video.readyState >= 3) {
+        // Video is already loaded
+        handleVideoReady();
+      } else {
+        // Wait for video to load
+        this.video.addEventListener('canplay', handleVideoReady, { once: true });
+        // Fallback timeout in case video fails to load
+        setTimeout(() => {
+          handleVideoReady();
+        }, 2000);
+      }
+    } else {
+      // No video, just wait a brief moment for page to settle
+      setTimeout(() => this.hideLoadingAnimation(), 500);
+    }
+  }
+}
+
+// Initialize page load controller
+document.addEventListener('DOMContentLoaded', () => {
+  new PageLoadController();
+});
 
 /**
  * Copy token address to clipboard
