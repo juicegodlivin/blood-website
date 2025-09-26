@@ -1,52 +1,55 @@
-# Erevos - Dark Ops AI Intelligence
+# Blood - Liquidation Intelligence Platform
 
-> AI Agent Stack for Dark Operations - Unfiltered intelligence, real information, and powerful AI tools that explore beyond conventional boundaries.
+> Advanced AI-powered liquidation tracking platform providing real-time intelligence across cryptocurrency markets for modern traders and institutions.
 
 ## Overview
 
-Erevos is an AI agent stack designed to protect users while offering powerful intelligence tools that explore beyond conventional boundaries. We look through the dark places, find real information, and aren't afraid to disagree with you to provide accurate, unfiltered intelligence.
+Blood is a cutting-edge liquidation tracking platform that monitors liquidation events across all major cryptocurrency exchanges in real-time. Our AI-powered intelligence system helps traders identify market opportunities, understand liquidation patterns, and make informed trading decisions.
 
 ## Features
 
 ### Core Capabilities
 
-- **Unfiltered Information Access**: Bypasses conventional content filters and restrictions to access real information from sources others won't touch
-- **Dark Web Intelligence**: Sophisticated crawling and analysis of dark web sources, encrypted communications, and hidden services
-- **Adversarial Truth Seeking**: Trained to disagree with users when necessary to provide accurate information, even when inconvenient
-- **Multi-Source Validation**: Cross-references information across multiple intelligence sources to verify accuracy and detect disinformation
-- **Operational Security**: Built-in OPSEC protocols protect user identity while maintaining secure access to sensitive intelligence
-- **Real-Time Threat Analysis**: Continuous monitoring and analysis of emerging threats, vulnerabilities, and intelligence developments
+- **Real-Time Liquidation Tracking**: Monitor liquidations across all major exchanges including Binance, OKX, Bybit, BitMEX, and dYdX
+- **Advanced Heatmaps**: Visual representation of liquidation clusters and market intensity
+- **Multi-Asset Coverage**: Track BTC, ETH, SOL, and 100+ other cryptocurrencies
+- **Intelligent Alerts**: AI-powered notifications for significant liquidation events
+- **Historical Analysis**: Deep dive into liquidation patterns and market trends
+- **API Integration**: RESTful API for institutional clients and developers
 
-### Intelligence Types
+### Intelligence Features
 
-- **Geopolitical Analysis**: Unbiased analysis of global events, conflicts, and political developments without corporate or governmental filtering
-- **Corporate Intelligence**: Deep investigation into corporate activities, financial irregularities, and business practices that may be hidden from public view
-- **Security Vulnerabilities**: Comprehensive vulnerability research and exploit analysis for defensive and educational purposes
-- **Social Engineering Intel**: Analysis of social manipulation techniques, propaganda campaigns, and information warfare tactics
+- **Liquidation Cascades**: Detect and predict liquidation cascade events
+- **Market Sentiment Analysis**: Understand market positioning through liquidation data
+- **Risk Assessment**: Evaluate market stress through liquidation volume analysis
+- **Position Sizing Intelligence**: Optimize position sizes based on liquidation zones
+- **Multi-Timeframe Analysis**: 1H, 4H, 1D, and 7D liquidation tracking
 
-### Integrations
+### Supported Exchanges
 
-- Tor Networks
-- OSINT Tools
-- Threat Intelligence Feeds
-- Dark Web APIs
+- Binance
+- OKX  
+- Bybit
+- BitMEX
+- dYdX
+- And more...
 
 ## Quick Start
 
 ### Prerequisites
 
-- Node.js 18.0.0 or higher
 - Modern web browser with JavaScript enabled
+- Internet connection for real-time data
 
-### Installation
+### Getting Started
 
-1. Clone or download this repository:
+1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/erevos-dark-ops.git
-   cd erevos-dark-ops
+   git clone https://github.com/juicegodlivin/blood-website.git
+   cd blood-website
    ```
 
-2. Install dependencies (optional, for development):
+2. Install dependencies (for development):
    ```bash
    npm install
    ```
@@ -60,15 +63,15 @@ Erevos is an AI agent stack designed to protect users while offering powerful in
 
 ### Production Deployment
 
-For production deployment, simply serve the static files:
+For production deployment, serve the static files:
 
 ```bash
 npm run start
 ```
 
-Or deploy the files to any static hosting service like:
+Or deploy to any static hosting service:
 - Vercel
-- Netlify
+- Netlify  
 - GitHub Pages
 - AWS S3 + CloudFront
 - Your own web server
@@ -76,43 +79,60 @@ Or deploy the files to any static hosting service like:
 ## Project Structure
 
 ```
-erevos-dark-ops/
-├── index.html          # Main application page
-├── styles.css          # Styling and theme
-├── script.js           # Application logic and interactions
-├── package.json        # Project configuration and dependencies
-├── README.md          # This file
-└── docs.html          # Documentation (to be created)
+blood-website/
+├── index.html              # Main landing page
+├── liquidations.html        # Liquidations dashboard
+├── docs.html               # API documentation
+├── styles.css              # Main styling
+├── liquidations.css        # Dashboard-specific styles
+├── script.js               # Application logic
+├── Blood Logo.png          # Brand logo
+├── Blood Background.mp4    # Video background
+├── wallet-auth-system/     # Wallet authentication
+└── package.json           # Project configuration
 ```
+
+## Usage
+
+### Main Dashboard
+
+Visit the liquidations page to access:
+- Real-time liquidation data
+- Interactive heatmaps
+- Exchange-specific breakdowns
+- Historical liquidation charts
+
+### API Integration
+
+Access our RESTful API for:
+- Real-time liquidation feeds
+- Historical data queries
+- Custom alert configurations
+- Webhook integrations
+
+See the [API Documentation](docs.html) for detailed integration guides.
+
+### Wallet Integration
+
+Connect your wallet to:
+- Access premium features
+- Set up personalized alerts
+- Save custom dashboard configurations
+- Export liquidation data
+
+Supported wallets:
+- Phantom (Solana)
+- Solflare (Solana)
+- MetaMask (Ethereum)
 
 ## Development
 
 ### Available Scripts
 
 - `npm run start` - Start production server
-- `npm run dev` - Start development server with live reload (using @web/dev-server)
-- `npm run lint` - Check JavaScript code quality (ESLint v9+)
-- `npm run lint:fix` - Fix JavaScript code issues automatically
-- `npm run validate` - Validate HTML structure
-- `npm run test` - Run tests (to be implemented)
-
-### Recent Security Improvements
-
-**Version 1.0.1 Security Update:**
-- ✅ **Zero Vulnerabilities**: Updated all dependencies to secure versions
-- ✅ **ESLint v9**: Migrated to latest ESLint with enhanced security rules
-- ✅ **Modern Dev Server**: Replaced vulnerable live-server with @web/dev-server
-- ✅ **HTML Validation**: Fixed all accessibility and validation issues
-- ✅ **Dependency Audit**: All packages now use secure, up-to-date versions
-
-### Code Quality
-
-The project includes ESLint configuration for maintaining code quality:
-
-```bash
-npm run lint
-npm run lint:fix
-```
+- `npm run dev` - Start development server with live reload
+- `npm run lint` - Check code quality
+- `npm run lint:fix` - Fix code issues automatically
 
 ### Browser Support
 
@@ -121,80 +141,83 @@ npm run lint:fix
 - Safari 14+
 - Edge 90+
 
-## Security Considerations
+## Technology Stack
 
-This project is designed with security in mind:
+- **Frontend**: Vanilla JavaScript, CSS3, HTML5
+- **Styling**: CSS Custom Properties, CSS Grid, Flexbox
+- **Fonts**: Inter, Space Grotesk, Manrope, Orbitron
+- **Data**: Real-time WebSocket connections
+- **Authentication**: Web3 wallet integration
 
-- **Content Security Policy (CSP) Ready**: All inline styles and scripts are properly handled
-- **Secure Navigation**: External links include proper security attributes
-- **HTTPS Only**: Designed to work only over secure connections
-- **No Third-Party Tracking**: Privacy-focused implementation
-- **Secure Random Generation**: Uses cryptographically secure random number generation where available
+## Security & Privacy
 
-## Accessibility
+- **No Data Storage**: We don't store private keys or personal information
+- **Secure Connections**: All data transmitted over HTTPS
+- **Privacy-First**: No unnecessary tracking or analytics
+- **Web3 Native**: Decentralized authentication through wallet connections
 
-Erevos is built with accessibility as a priority:
+## API Features
 
-- **WCAG 2.1 AA Compliant**: Meets accessibility guidelines
-- **Screen Reader Support**: Full ARIA implementation
-- **Keyboard Navigation**: Complete keyboard accessibility
-- **Reduced Motion Support**: Respects user preferences
-- **High Contrast Support**: Enhanced visibility options
-- **Focus Management**: Proper focus indicators and management
+### Real-Time Endpoints
 
-## Performance
+- `/api/liquidations/live` - Live liquidation stream
+- `/api/liquidations/summary` - Market summary data
+- `/api/exchanges/{exchange}` - Exchange-specific data
+- `/api/assets/{symbol}` - Asset-specific liquidations
 
-- **Lightweight**: Minimal dependencies and optimized code
-- **Fast Loading**: Optimized assets and lazy loading
-- **Responsive**: Works on all device sizes
-- **Progressive Enhancement**: Works without JavaScript
-- **Modern CSS**: Uses CSS Grid and Flexbox for efficient layouts
+### Historical Data
+
+- `/api/liquidations/history` - Historical liquidation data
+- `/api/analytics/trends` - Trend analysis
+- `/api/reports/daily` - Daily liquidation reports
 
 ## Customization
 
-### Theming
+### Themes
 
-The application supports both dark and light themes. The theme preference is automatically detected and saved locally.
-
-### Colors
-
-Main color variables can be customized in `styles.css`:
+The platform uses CSS custom properties for easy theming:
 
 ```css
 :root {
-  --color-accent: #ff4444;           /* Primary accent color */
-  --color-accent-secondary: #ffaa00;  /* Secondary accent color */
-  --color-bg-primary: #0a0a0a;       /* Primary background */
-  --color-text-primary: #ffffff;      /* Primary text */
+  --color-accent: #ff4444;           /* Blood red accent */
+  --color-bg-primary: rgba(20, 0, 0, 0.8);  /* Dark background */
+  --color-text-primary: #ffffff;     /* Primary text */
 }
 ```
 
-### Content
+### Dashboard Configuration
 
-All content can be customized by editing the HTML files. The structure is semantic and easy to modify.
+Customize your dashboard by:
+- Selecting preferred exchanges
+- Setting up custom alerts
+- Choosing display preferences
+- Configuring data refresh rates
 
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
+2. Create a feature branch: `git checkout -b feature/liquidation-alerts`
 3. Make your changes
 4. Test thoroughly
-5. Commit your changes: `git commit -am 'Add feature'`
-6. Push to the branch: `git push origin feature-name`
+5. Commit: `git commit -am 'Add liquidation alerts feature'`
+6. Push: `git push origin feature/liquidation-alerts`
 7. Create a Pull Request
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Disclaimer
-
-This project is for educational and research purposes. Users are responsible for ensuring their use complies with applicable laws and regulations. The developers are not responsible for any misuse of this software.
-
 ## Support
 
-For support, please open an issue on the GitHub repository or contact the development team.
+For support and questions:
+- Open an issue on GitHub
+- Visit our documentation at [docs.html](docs.html)
+- Follow us on [X (Twitter)](https://x.com/erevos_ops)
+
+## Disclaimer
+
+Blood is a financial intelligence tool for educational and informational purposes. Liquidation data should not be considered as financial advice. Users are responsible for their own trading decisions and risk management.
 
 ---
 
-**Erevos Intelligence** - Dark operations intelligence for the modern era.
+**Blood Analytics** - Advanced liquidation intelligence for the modern trader.
