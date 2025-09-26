@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood - Buy the Blood</title>
+    <meta name="description" content="Advanced liquidation tracking platform - Real-time monitoring of liquidations across all markets to identify the heaviest liquidation zones">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-video-background">
+            <video autoplay muted loop playsinline>
+                <source src="Blood Background.mp4" type="video/mp4">
+            </video>
+            <div class="loading-video-overlay"></div>
+        </div>
+        <div class="loading-container">
+            <div class="blood-drop-loader">
+                <div class="blood-drop"></div>
+                <div class="blood-drop"></div>
+                <div class="blood-drop"></div>
+            </div>
+            <div class="loading-text">
+                <h1>BLOOD</h1>
+                <p>Initializing liquidation intelligence...</p>
+                <div class="loading-progress">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="loading-percentage" id="loadingPercentage">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authentication Screen -->
+    <div class="auth-screen hidden" id="authScreen">
+        <div class="video-background">
+            <video autoplay muted loop playsinline>
+                <source src="Blood Background.mp4" type="video/mp4">
+            </video>
+            <div class="video-overlay"></div>
+        </div>
+        <div class="auth-container">
+            <div class="auth-backdrop"></div>
+            <div class="auth-content">
+                <div class="auth-header">
+                    <div class="auth-logo">
+                        <div class="logo-glow">
+                            <img class="logo-icon" src="Blood Logo.png" alt="Blood Logo" />
+                        </div>
+                        <div class="auth-brand">
+                            <span class="auth-logo-text">BLOOD</span>
+                            <span class="auth-tagline">Liquidation Intelligence</span>
+                        </div>
+                    </div>
+                    <div class="auth-divider"></div>
+                </div>
+
+                <div class="auth-body">
+                    <div class="auth-title-section">
+                        <h2 class="auth-title">
+                            <span class="title-main">INITIATE CONNECTION</span>
+                            <div class="title-glitch" data-text="INITIATE CONNECTION">INITIATE CONNECTION</div>
+                        </h2>
+                        <p class="auth-subtitle">Select your blockchain interface to access liquidation intelligence</p>
+                        <div class="danger-line"></div>
+                    </div>
+                    
+                    <div class="wallet-terminal">
+                        <div class="terminal-header">
+                            <span class="terminal-text">WALLET_SELECTION.exe</span>
+                        </div>
+                        
+                        <div class="wallet-grid">
+                            <button class="wallet-card phantom-card" data-wallet="phantom">
+                                <div class="card-glitch"></div>
+                                <div class="wallet-card-inner">
+                                    <div class="wallet-icon-container">
+                                        <img class="wallet-icon phantom-icon" src="phantom-wallet-logo.png" alt="Phantom Wallet" />
+                                    </div>
+                                    <div class="wallet-info">
+                                        <h3 class="wallet-name">PHANTOM</h3>
+                                        <p class="wallet-desc">SOL • PROTOCOL</p>
+                                    </div>
+                                    <div class="wallet-connect-btn">
+                                        <span class="connect-text">CONNECT</span>
+                                        <div class="connect-arrow">→</div>
+                                    </div>
+                                </div>
+                            </button>
+
+                            <button class="wallet-card solflare-card" data-wallet="solflare">
+                                <div class="card-glitch"></div>
+                                <div class="wallet-card-inner">
+                                    <div class="wallet-icon-container">
+                                        <img class="wallet-icon solflare-icon" src="solflare-wallet-logo.jpg" alt="Solflare Wallet" />
+                                    </div>
+                                    <div class="wallet-info">
+                                        <h3 class="wallet-name">SOLFLARE</h3>
+                                        <p class="wallet-desc">SOL • SECURE</p>
+                                    </div>
+                                    <div class="wallet-connect-btn">
+                                        <span class="connect-text">CONNECT</span>
+                                        <div class="connect-arrow">→</div>
+                                    </div>
+                                </div>
+                            </button>
+
+                            <button class="wallet-card metamask-card" data-wallet="metamask">
+                                <div class="card-glitch"></div>
+                                <div class="wallet-card-inner">
+                                    <div class="wallet-icon-container">
+                                        <img class="wallet-icon metamask-icon" src="metamask-wallet-logo.jpg" alt="MetaMask Wallet" />
+                                    </div>
+                                    <div class="wallet-info">
+                                        <h3 class="wallet-name">METAMASK</h3>
+                                        <p class="wallet-desc">ETH • EVM</p>
+                                    </div>
+                                    <div class="wallet-connect-btn">
+                                        <span class="connect-text">CONNECT</span>
+                                        <div class="connect-arrow">→</div>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="auth-footer">
+                    <div class="security-badge">
+                        <svg class="security-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 22S8 18 8 13V7L12 5L16 7V13C16 18 12 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Secure & Encrypted Connection</span>
+                    </div>
+                    <p class="auth-disclaimer">We never store your private keys or personal information</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content (Hidden by default) -->
+    <div class="main-content hidden" id="mainContent">
+        <div class="video-background">
+            <video autoplay muted loop playsinline>
+                <source src="Blood Background.mp4" type="video/mp4">
+            </video>
+            <div class="video-overlay"></div>
+        </div>
+    
+    <header class="header">
+        <nav class="nav" aria-label="Main navigation">
+            <div class="ca-section">
+                <button class="ca-button" id="tokenAddress" onclick="copyTokenAddress()">
+                    <span class="ca-label">CA:</span>
+                    <span class="ca-address">4x7B...9oP0</span>
+                    <span class="copy-icon">📋</span>
+                </button>
+            </div>
+            <div class="nav-brand">
+                <a href="index.html" class="logo">
+                    <img class="logo-icon" src="Blood Logo.png" alt="Blood Logo" />
+                    <span class="logo-text">BLOOD</span>
+                </a>
+            </div>
+            <ul class="nav-menu" role="menubar">
+                <li role="none">
+                    <a href="liquidations.html" class="nav-link" role="menuitem">Liquidations</a>
+                </li>
+                <li role="none">
+                    <a href="docs.html" class="nav-link" role="menuitem">Integrate API</a>
+                </li>
+                <li role="none">
+                    <a href="https://x.com/erevos_ops" class="nav-link" role="menuitem" target="_blank" rel="noopener noreferrer">X Account</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main" id="main">
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="container">
+                <div class="hero-layout hero-centered">
+                    <div class="hero-content">
+                        <h1 class="hero-title" id="hero-title">
+                            Buy the Blood
+                        </h1>
+                        <div class="hero-text-container">
+                            <p class="hero-description">
+                                Advanced liquidation tracking across all markets. 
+                                Real-time intelligence for the modern trader.
+                            </p>
+                        </div>
+                        <div class="hero-actions">
+                            <a href="liquidations.html" class="btn btn-primary">
+                                Track Liquidations
+                            </a>
+                            <a href="docs.html" class="btn btn-secondary">
+                                Integrate API
+                            </a>
+                        </div>
+                    </div>
+
+            </div>
+        </section>
+
+
+        <section class="capabilities" id="capabilities" aria-labelledby="capabilities-title">
+            <div class="container">
+                <div class="section-header">
+                        <h2 class="capabilities-title" id="capabilities-title">
+                            Liquidation Tracking Features
+                        </h2>
+                        <p class="capabilities-subtitle">
+                            Advanced monitoring across all liquidation markets in real-time
+                        </p>
+                </div>
+
+                <div class="capabilities-grid">
+                    <article class="capability-item">
+                        <div class="capability-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2L22 8.5V15.5L12 22L2 15.5V8.5L12 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3 class="capability-title">Track Everything</h3>
+                        <p class="capability-description">
+                            Real-time liquidation monitoring across all exchanges.
+                        </p>
+                    </article>
+
+                    <article class="capability-item">
+                        <div class="capability-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <h3 class="capability-title">Spot the Danger</h3>
+                        <p class="capability-description">
+                            Instant alerts when liquidation cascades start.
+                        </p>
+                    </article>
+
+                    <article class="capability-item">
+                        <div class="capability-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M3 7V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7Z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M8 11V13H16V11" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M12 8V16" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <h3 class="capability-title">Learn the Patterns</h3>
+                        <p class="capability-description">
+                            See where liquidations hit hardest.
+                        </p>
+                    </article>
+
+                    <article class="capability-item">
+                        <div class="capability-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3 class="capability-title">Auto-Buy the Blood</h3>
+                        <p class="capability-description">
+                            Auto-buy discounted positions from liquidations.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">Blood</span>
+                    <p class="footer-description">
+                        Liquidation intelligence platform for the modern trader.
+                    </p>
+                </div>
+
+                <nav class="footer-nav" aria-label="Footer navigation">
+                    <div class="footer-section">
+                        <h3 class="footer-section-title">Platform</h3>
+                        <ul class="footer-links">
+                            <li><a href="docs.html" class="footer-link">Integrate API</a></li>
+                            <li><a href="https://x.com/erevos_ops" class="footer-link" target="_blank" rel="noopener noreferrer">X Account</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h3 class="footer-section-title">Security</h3>
+                        <ul class="footer-links">
+                            <li><a href="docs.html#security" class="footer-link">OPSEC</a></li>
+                            <li><a href="docs.html#security" class="footer-link">Privacy Policy</a></li>
+                            <li><a href="docs.html#security" class="footer-link">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="copyright">
+                    © 2025 Blood Analytics. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

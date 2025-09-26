@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood - Liquidations Dashboard</title>
+    <meta name="description" content="Real-time liquidation tracking across all cryptocurrency markets with advanced heatmaps and analytics">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="liquidations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen (Hidden by default for authenticated users) -->
+    <div class="loading-screen hidden" id="loadingScreen">
+        <div class="loading-video-background">
+            <video autoplay muted loop>
+                <source src="Blood Background.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="loading-video-overlay"></div>
+        <div class="loading-container">
+            <div class="blood-drop-loader">
+                <div class="blood-drop"></div>
+                <div class="blood-drop"></div>
+                <div class="blood-drop"></div>
+            </div>
+            <div class="loading-text">BLOOD</div>
+            <div class="loading-subtitle">Reconnecting to liquidation intelligence...</div>
+            <div class="loading-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="loading-percentage" id="loadingPercentage">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authentication Screen (Hidden by default) -->
+    <div class="auth-screen hidden" id="authScreen">
+        <div class="auth-backdrop"></div>
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="auth-logo">B</div>
+                <h1 class="auth-title">WALLET CONNECTION</h1>
+                <p class="auth-subtitle">Select your blockchain interface to continue</p>
+            </div>
+            <div class="auth-body">
+                <div class="wallet-grid">
+                    <div class="wallet-card" data-wallet="phantom">
+                        <div class="wallet-card-inner">
+                            <img class="wallet-icon phantom-icon" src="phantom-wallet-logo.png" alt="Phantom Wallet" />
+                            <div class="wallet-info">
+                                <div class="wallet-name">PHANTOM</div>
+                                <div class="wallet-desc">SOL • PROTOCOL</div>
+                            </div>
+                            <div class="connect-text">CONNECT</div>
+                        </div>
+                    </div>
+                    <div class="wallet-card" data-wallet="solflare">
+                        <div class="wallet-card-inner">
+                            <img class="wallet-icon solflare-icon" src="solflare-wallet-logo.jpg" alt="Solflare Wallet" />
+                            <div class="wallet-info">
+                                <div class="wallet-name">SOLFLARE</div>
+                                <div class="wallet-desc">SOL • SECURE</div>
+                            </div>
+                            <div class="connect-text">CONNECT</div>
+                        </div>
+                    </div>
+                    <div class="wallet-card" data-wallet="metamask">
+                        <div class="wallet-card-inner">
+                            <img class="wallet-icon metamask-icon" src="metamask-wallet-logo.jpg" alt="MetaMask Wallet" />
+                            <div class="wallet-info">
+                                <div class="wallet-name">METAMASK</div>
+                                <div class="wallet-desc">ETH • EVM</div>
+                            </div>
+                            <div class="connect-text">CONNECT</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="auth-footer">
+                <p class="auth-disclaimer">
+                    🔒 SECURE & ENCRYPTED CONNECTION<br>
+                    NEVER STORE YOUR PRIVATE KEYS OR PERSONAL INFORMATION
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="Blood Background.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+    
+    <header class="header">
+        <nav class="nav" aria-label="Main navigation">
+            <div class="ca-section">
+                <button class="ca-button" id="tokenAddress" onclick="copyTokenAddress()">
+                    <span class="ca-label">CA:</span>
+                    <span class="ca-address">4x7B...9oP0</span>
+                    <span class="copy-icon">📋</span>
+                </button>
+            </div>
+            <div class="nav-brand">
+                <a href="index.html" class="logo">
+                    <img class="logo-icon" src="Blood Logo.png" alt="Blood Logo" />
+                    <span class="logo-text">BLOOD</span>
+                </a>
+            </div>
+            <ul class="nav-menu" role="menubar">
+                <li role="none">
+                    <a href="liquidations.html" class="nav-link active" role="menuitem">Liquidations</a>
+                </li>
+                <li role="none">
+                    <a href="docs.html" class="nav-link" role="menuitem">Integrate API</a>
+                </li>
+                <li role="none">
+                    <a href="https://x.com/erevos_ops" class="nav-link" role="menuitem" target="_blank" rel="noopener noreferrer">X Account</a>
+                </li>
+                <li role="none" class="wallet-dropdown-container">
+                    <button class="wallet-signin-btn" id="walletSigninBtn" onclick="toggleWalletDropdown()">
+                        <svg class="wallet-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 7H7V5C7 3.895 7.895 3 9 3H18C18.553 3 19 2.552 19 2C19 1.448 18.553 1 18 1H9C6.791 1 5 2.791 5 5V7H3C2.448 7 2 7.448 2 8V20C2 21.105 2.895 22 4 22H21C21.553 22 22 21.552 22 21V8C22 7.448 21.553 7 21 7ZM20 20H4V9H20V20Z" fill="currentColor"/>
+                            <circle cx="16" cy="14.5" r="1.5" fill="currentColor"/>
+                        </svg>
+                        <span class="signin-text">WALLET</span>
+                        <svg class="dropdown-arrow" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    
+                    <!-- Wallet Dropdown Menu -->
+                    <div class="wallet-dropdown" id="walletDropdown">
+                        <div class="wallet-dropdown-header">
+                            <h3 class="dropdown-title">CONNECT WALLET</h3>
+                            <p class="dropdown-subtitle">Choose your blockchain interface</p>
+                        </div>
+                        
+                        <div class="wallet-dropdown-body">
+                            <div class="wallet-dropdown-grid">
+                                <div class="wallet-dropdown-card" data-wallet="phantom" onclick="connectDropdownWallet('phantom')">
+                                    <img class="wallet-dropdown-icon" src="phantom-wallet-logo.png" alt="Phantom Wallet" />
+                                    <div class="wallet-dropdown-info">
+                                        <div class="wallet-dropdown-name">PHANTOM</div>
+                                        <div class="wallet-dropdown-desc">SOL • PROTOCOL</div>
+                                    </div>
+                                    <div class="dropdown-connect-text">CONNECT</div>
+                                </div>
+                                
+                                <div class="wallet-dropdown-card" data-wallet="solflare" onclick="connectDropdownWallet('solflare')">
+                                    <img class="wallet-dropdown-icon" src="solflare-wallet-logo.jpg" alt="Solflare Wallet" />
+                                    <div class="wallet-dropdown-info">
+                                        <div class="wallet-dropdown-name">SOLFLARE</div>
+                                        <div class="wallet-dropdown-desc">SOL • SECURE</div>
+                                    </div>
+                                    <div class="dropdown-connect-text">CONNECT</div>
+                                </div>
+                                
+                                <div class="wallet-dropdown-card" data-wallet="metamask" onclick="connectDropdownWallet('metamask')">
+                                    <img class="wallet-dropdown-icon" src="metamask-wallet-logo.jpg" alt="MetaMask Wallet" />
+                                    <div class="wallet-dropdown-info">
+                                        <div class="wallet-dropdown-name">METAMASK</div>
+                                        <div class="wallet-dropdown-desc">ETH • EVM</div>
+                                    </div>
+                                    <div class="dropdown-connect-text">CONNECT</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="wallet-dropdown-footer">
+                            <p class="dropdown-disclaimer">
+                                🔒 Secure & encrypted connection
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main liquidations-main" id="main">
+        <!-- Crypto Liquidations Total Section -->
+        <section class="liquidations-total">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="page-title">Crypto Liquidations Total</h1>
+                    <p class="page-subtitle">Monitor total crypto liquidations across exchanges in real-time market volatility, track positions and understand the impact on trading and market sentiment.</p>
+                </div>
+                
+                <div class="liquidations-overview">
+                    <div class="overview-main">
+                        <div class="total-display">
+                            <div class="total-label">Total</div>
+                            <div class="total-value">$74.2M</div>
+                            <div class="total-change positive">+2.4%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="overview-stats">
+                        <div class="overview-table">
+                            <div class="table-row header">
+                                <div class="cell">Asset</div>
+                                <div class="cell">Long</div>
+                                <div class="cell">Short</div>
+                                <div class="cell">Total</div>
+                            </div>
+                            <div class="table-row">
+                                <div class="cell asset-cell">
+                                    <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/1.png" alt="BTC" class="asset-icon">
+                                    <span>BTC</span>
+                                </div>
+                                <div class="cell long">$18.2M</div>
+                                <div class="cell short">$13.3M</div>
+                                <div class="cell total">$31.5M</div>
+                            </div>
+                            <div class="table-row">
+                                <div class="cell asset-cell">
+                                    <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/1027.png" alt="ETH" class="asset-icon">
+                                    <span>ETH</span>
+                                </div>
+                                <div class="cell long">$11.4M</div>
+                                <div class="cell short">$8.4M</div>
+                                <div class="cell total">$19.8M</div>
+                            </div>
+                            <div class="table-row">
+                                <div class="cell asset-cell">
+                                    <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/5426.png" alt="SOL" class="asset-icon">
+                                    <span>SOL</span>
+                                </div>
+                                <div class="cell long">$5.2M</div>
+                                <div class="cell short">$3.5M</div>
+                                <div class="cell total">$8.7M</div>
+                            </div>
+                            <div class="table-row">
+                                <div class="cell">Others</div>
+                                <div class="cell long">$11.0M</div>
+                                <div class="cell short">$3.2M</div>
+                                <div class="cell total">$14.2M</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Liquidation Heatmap Section -->
+        <section class="liquidation-heatmap">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Liquidation Heatmap</h2>
+                    <p class="section-subtitle">Visualize market liquidations at a glance where colors indicate long liquidations and red indicates short liquidations across different assets and timeframes.</p>
+                    <div class="heatmap-controls">
+                        <button class="control-btn active">1H</button>
+                        <button class="control-btn">4H</button>
+                        <button class="control-btn">1D</button>
+                        <button class="control-btn">7D</button>
+                    </div>
+                </div>
+                
+                <div class="heatmap-container">
+                    <div class="heatmap-grid">
+                        <div class="heatmap-cell large long" data-symbol="BTC" data-value="15.2M">
+                            <span class="cell-symbol">BTC</span>
+                            <span class="cell-value">$15.2M</span>
+                        </div>
+                        <div class="heatmap-cell medium short" data-symbol="ETH" data-value="8.4M">
+                            <span class="cell-symbol">ETH</span>
+                            <span class="cell-value">$8.4M</span>
+                        </div>
+                        <div class="heatmap-cell small long" data-symbol="SOL" data-value="3.1M">
+                            <span class="cell-symbol">SOL</span>
+                            <span class="cell-value">$3.1M</span>
+                        </div>
+                        <div class="heatmap-cell medium long" data-symbol="ADA" data-value="5.7M">
+                            <span class="cell-symbol">ADA</span>
+                            <span class="cell-value">$5.7M</span>
+                        </div>
+                        <div class="heatmap-cell small short" data-symbol="DOGE" data-value="2.8M">
+                            <span class="cell-symbol">DOGE</span>
+                            <span class="cell-value">$2.8M</span>
+                        </div>
+                        <div class="heatmap-cell small long" data-symbol="MATIC" data-value="1.9M">
+                            <span class="cell-symbol">MATIC</span>
+                            <span class="cell-value">$1.9M</span>
+                        </div>
+                        <div class="heatmap-cell tiny short" data-symbol="LINK" data-value="0.8M">
+                            <span class="cell-symbol">LINK</span>
+                            <span class="cell-value">$0.8M</span>
+                        </div>
+                        <div class="heatmap-cell tiny long" data-symbol="DOT" data-value="0.6M">
+                            <span class="cell-symbol">DOT</span>
+                            <span class="cell-value">$0.6M</span>
+                        </div>
+                        <div class="heatmap-cell tiny short" data-symbol="AVAX" data-value="0.5M">
+                            <span class="cell-symbol">AVAX</span>
+                            <span class="cell-value">$0.5M</span>
+                        </div>
+                        <div class="heatmap-cell tiny long" data-symbol="UNI" data-value="0.4M">
+                            <span class="cell-symbol">UNI</span>
+                            <span class="cell-value">$0.4M</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exchange Liquidations Section -->
+        <section class="exchange-liquidations">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Exchange Liquidations</h2>
+                    <p class="section-subtitle">Track liquidation activity across major cryptocurrency exchanges to identify where the most significant liquidations are occurring.</p>
+                    <div class="table-controls">
+                        <button class="control-btn active">All</button>
+                        <button class="control-btn">24h</button>
+                        <button class="control-btn">7d</button>
+                    </div>
+                </div>
+                
+                <div class="exchange-table-container">
+                    <table class="exchange-table">
+                        <thead>
+                            <tr>
+                                <th>Exchange</th>
+                                <th>Total Liquidations</th>
+                                <th>Long</th>
+                                <th>Short</th>
+                                <th>BTC</th>
+                                <th>ETH</th>
+                                <th>Others</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="exchange-info">
+                                        <img src="https://s2.coinmarketcap.com/static/img/exchanges/32x32/270.png" alt="Binance" class="exchange-logo">
+                                        <span>Binance</span>
+                                    </div>
+                                </td>
+                                <td class="value">$28.4M</td>
+                                <td class="value long">$18.2M</td>
+                                <td class="value short">$10.2M</td>
+                                <td class="value">$12.1M</td>
+                                <td class="value">$8.3M</td>
+                                <td class="value">$8.0M</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="exchange-info">
+                                        <img src="https://s2.coinmarketcap.com/static/img/exchanges/32x32/294.png" alt="OKX" class="exchange-logo">
+                                        <span>OKX</span>
+                                    </div>
+                                </td>
+                                <td class="value">$19.7M</td>
+                                <td class="value long">$11.4M</td>
+                                <td class="value short">$8.3M</td>
+                                <td class="value">$8.9M</td>
+                                <td class="value">$5.2M</td>
+                                <td class="value">$5.6M</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="exchange-info">
+                                        <img src="https://s2.coinmarketcap.com/static/img/exchanges/32x32/524.png" alt="Bybit" class="exchange-logo">
+                                        <span>Bybit</span>
+                                    </div>
+                                </td>
+                                <td class="value">$15.3M</td>
+                                <td class="value long">$9.1M</td>
+                                <td class="value short">$6.2M</td>
+                                <td class="value">$6.7M</td>
+                                <td class="value">$4.1M</td>
+                                <td class="value">$4.5M</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="exchange-info">
+                                        <img src="https://s2.coinmarketcap.com/static/img/exchanges/32x32/157.png" alt="BitMEX" class="exchange-logo">
+                                        <span>BitMEX</span>
+                                    </div>
+                                </td>
+                                <td class="value">$7.8M</td>
+                                <td class="value long">$4.2M</td>
+                                <td class="value short">$3.6M</td>
+                                <td class="value">$5.1M</td>
+                                <td class="value">$1.8M</td>
+                                <td class="value">$0.9M</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="exchange-info">
+                                        <img src="https://s2.coinmarketcap.com/static/img/exchanges/32x32/1002.png" alt="dYdX" class="exchange-logo">
+                                        <span>dYdX</span>
+                                    </div>
+                                </td>
+                                <td class="value">$3.0M</td>
+                                <td class="value long">$1.9M</td>
+                                <td class="value short">$1.1M</td>
+                                <td class="value">$1.4M</td>
+                                <td class="value">$0.9M</td>
+                                <td class="value">$0.7M</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Total Liquidations Chart Section -->
+        <section class="liquidations-chart">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Total Liquidations Chart</h2>
+                    <p class="section-subtitle">Aggregated liquidations data across all exchanges, covering BTC, ETH, and ALTs.</p>
+                    <div class="chart-controls">
+                        <button class="control-btn">1H</button>
+                        <button class="control-btn active">4H</button>
+                        <button class="control-btn">1D</button>
+                        <button class="control-btn">7D</button>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-placeholder">
+                        <div class="chart-bars">
+                            <div class="chart-bar" style="height: 20%;" data-value="$2.1M"></div>
+                            <div class="chart-bar" style="height: 35%;" data-value="$3.8M"></div>
+                            <div class="chart-bar" style="height: 15%;" data-value="$1.9M"></div>
+                            <div class="chart-bar" style="height: 60%;" data-value="$6.2M"></div>
+                            <div class="chart-bar" style="height: 45%;" data-value="$4.7M"></div>
+                            <div class="chart-bar" style="height: 80%;" data-value="$8.1M"></div>
+                            <div class="chart-bar" style="height: 25%;" data-value="$2.8M"></div>
+                            <div class="chart-bar" style="height: 90%;" data-value="$9.3M"></div>
+                            <div class="chart-bar" style="height: 70%;" data-value="$7.2M"></div>
+                            <div class="chart-bar" style="height: 40%;" data-value="$4.1M"></div>
+                            <div class="chart-bar" style="height: 55%;" data-value="$5.6M"></div>
+                            <div class="chart-bar" style="height: 30%;" data-value="$3.2M"></div>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <span class="legend-color long"></span>
+                                <span>Long Liquidations</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color short"></span>
+                                <span>Short Liquidations</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Total Liquidations Table Section -->
+        <section class="total-liquidations-table">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Total Liquidations</h2>
+                    <p class="section-subtitle">Complete liquidation tracking across all major cryptocurrencies and exchanges with detailed breakdowns.</p>
+                </div>
+                
+                <div class="liquidations-table-container">
+                    <table class="liquidations-table">
+                        <thead>
+                            <tr>
+                                <th>Ranking</th>
+                                <th>Symbol</th>
+                                <th>Total</th>
+                                <th>Long 24h</th>
+                                <th>Short 24h</th>
+                                <th>Long 4h</th>
+                                <th>Short 4h</th>
+                                <th>Long 1h</th>
+                                <th>Short 1h</th>
+                                <th>Trend</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <div class="crypto-info">
+                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/1.png" alt="Bitcoin" class="crypto-logo">
+                                        <span>BTC</span>
+                                    </div>
+                                </td>
+                                <td class="value highlight">$31.5M</td>
+                                <td class="value long-bg">$18.2M</td>
+                                <td class="value short-bg">$13.3M</td>
+                                <td class="value long-bg">$4.8M</td>
+                                <td class="value short-bg">$3.2M</td>
+                                <td class="value long-bg">$1.2M</td>
+                                <td class="value short-bg">$0.8M</td>
+                                <td class="trend up">↗</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>
+                                    <div class="crypto-info">
+                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/1027.png" alt="Ethereum" class="crypto-logo">
+                                        <span>ETH</span>
+                                    </div>
+                                </td>
+                                <td class="value highlight">$19.8M</td>
+                                <td class="value long-bg">$11.4M</td>
+                                <td class="value short-bg">$8.4M</td>
+                                <td class="value long-bg">$3.1M</td>
+                                <td class="value short-bg">$2.2M</td>
+                                <td class="value long-bg">$0.8M</td>
+                                <td class="value short-bg">$0.6M</td>
+                                <td class="trend down">↘</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>
+                                    <div class="crypto-info">
+                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/5426.png" alt="Solana" class="crypto-logo">
+                                        <span>SOL</span>
+                                    </div>
+                                </td>
+                                <td class="value highlight">$8.7M</td>
+                                <td class="value long-bg">$5.2M</td>
+                                <td class="value short-bg">$3.5M</td>
+                                <td class="value long-bg">$1.4M</td>
+                                <td class="value short-bg">$0.9M</td>
+                                <td class="value long-bg">$0.3M</td>
+                                <td class="value short-bg">$0.2M</td>
+                                <td class="trend up">↗</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>
+                                    <div class="crypto-info">
+                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/2010.png" alt="Cardano" class="crypto-logo">
+                                        <span>ADA</span>
+                                    </div>
+                                </td>
+                                <td class="value highlight">$4.3M</td>
+                                <td class="value long-bg">$2.6M</td>
+                                <td class="value short-bg">$1.7M</td>
+                                <td class="value long-bg">$0.7M</td>
+                                <td class="value short-bg">$0.4M</td>
+                                <td class="value long-bg">$0.2M</td>
+                                <td class="value short-bg">$0.1M</td>
+                                <td class="trend up">↗</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>
+                                    <div class="crypto-info">
+                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/74.png" alt="Dogecoin" class="crypto-logo">
+                                        <span>DOGE</span>
+                                    </div>
+                                </td>
+                                <td class="value highlight">$3.1M</td>
+                                <td class="value long-bg">$1.8M</td>
+                                <td class="value short-bg">$1.3M</td>
+                                <td class="value long-bg">$0.5M</td>
+                                <td class="value short-bg">$0.3M</td>
+                                <td class="value long-bg">$0.1M</td>
+                                <td class="value short-bg">$0.1M</td>
+                                <td class="trend down">↘</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Educational Content Section -->
+        <section class="educational-content">
+            <div class="container">
+                <div class="content-grid">
+                    <div class="content-block">
+                        <h3 class="content-title">What Are Crypto Liquidations?</h3>
+                        <p class="content-text">Crypto liquidations occur when a trader's leveraged position is automatically closed by the exchange due to insufficient margin to maintain the position. This typically happens when the market moves against the trader's position, causing their account balance to fall below the required maintenance margin.</p>
+                        <p class="content-text">Liquidations are a critical market mechanism that helps prevent traders from losing more money than they have in their accounts. However, mass liquidation events can create significant market volatility and cascading effects across the cryptocurrency ecosystem.</p>
+                    </div>
+                    
+                    <div class="content-block">
+                        <h3 class="content-title">How Liquidations Impact Crypto Markets</h3>
+                        <p class="content-text">Large-scale liquidations can trigger dramatic price movements in cryptocurrency markets. When many long positions are liquidated simultaneously, it creates additional selling pressure, potentially driving prices lower and triggering more liquidations in a cascade effect.</p>
+                        <p class="content-text">Similarly, mass short liquidations can fuel rapid price increases as positions are forcibly closed through market buy orders. Understanding liquidation patterns helps traders anticipate potential volatility and market turning points.</p>
+                    </div>
+                    
+                    <div class="content-block">
+                        <h3 class="content-title">Why Do Liquidations Matter in Crypto Markets?</h3>
+                        <p class="content-text">Liquidations serve as important market indicators, often signaling potential price reversals or continuation patterns. High liquidation volumes typically coincide with significant market movements and can help identify support and resistance levels.</p>
+                        <p class="content-text">For traders, monitoring liquidation data provides insights into market sentiment, overleveraged positions, and potential opportunities. Institutional traders often use liquidation clusters as contrarian indicators for market timing.</p>
+                    </div>
+                    
+                    <div class="content-block">
+                        <h3 class="content-title">Which Cryptocurrencies Face the Most Liquidations?</h3>
+                        <p class="content-text">Bitcoin and Ethereum typically account for the majority of liquidation volume due to their high trading activity and widespread availability on leveraged trading platforms. However, during altcoin seasons, smaller cryptocurrencies can experience disproportionately high liquidation rates.</p>
+                        <p class="content-text">Newer, more volatile cryptocurrencies often see higher liquidation rates as traders attempt to capitalize on price movements with excessive leverage, leading to frequent position closures during market volatility.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">Blood</span>
+                    <p class="footer-description">
+                        Liquidation intelligence platform for the modern trader.
+                    </p>
+                </div>
+
+                <nav class="footer-nav" aria-label="Footer navigation">
+                    <div class="footer-section">
+                        <h3 class="footer-section-title">Platform</h3>
+                        <ul class="footer-links">
+                            <li><a href="docs.html" class="footer-link">Integrate API</a></li>
+                            <li><a href="https://x.com/erevos_ops" class="footer-link" target="_blank" rel="noopener noreferrer">X Account</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h3 class="footer-section-title">Security</h3>
+                        <ul class="footer-links">
+                            <li><a href="docs.html#security" class="footer-link">OPSEC</a></li>
+                            <li><a href="docs.html#security" class="footer-link">Privacy Policy</a></li>
+                            <li><a href="docs.html#security" class="footer-link">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="copyright">
+                    © 2025 Blood Analytics. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    
+    <script>
+        // Wallet Dropdown Control for Liquidations Page
+        let dropdownOpen = false;
+        
+        function toggleWalletDropdown() {
+            console.log('Toggling wallet dropdown...');
+            
+            const dropdown = document.getElementById('walletDropdown');
+            const button = document.getElementById('walletSigninBtn');
+            
+            if (!dropdown || !button) {
+                console.error('Dropdown elements not found');
+                return;
+            }
+            
+            dropdownOpen = !dropdownOpen;
+            
+            if (dropdownOpen) {
+                dropdown.classList.add('active');
+                button.classList.add('active');
+                // Close dropdown when clicking outside
+                setTimeout(() => {
+                    document.addEventListener('click', closeDropdownOnClickOutside);
+                }, 100);
+            } else {
+                dropdown.classList.remove('active');
+                button.classList.remove('active');
+                document.removeEventListener('click', closeDropdownOnClickOutside);
+            }
+        }
+        
+        function closeDropdownOnClickOutside(event) {
+            const dropdown = document.getElementById('walletDropdown');
+            const button = document.getElementById('walletSigninBtn');
+            const container = dropdown?.closest('.wallet-dropdown-container');
+            
+            if (container && !container.contains(event.target)) {
+                dropdown.classList.remove('active');
+                button.classList.remove('active');
+                dropdownOpen = false;
+                document.removeEventListener('click', closeDropdownOnClickOutside);
+            }
+        }
+        
+        function connectDropdownWallet(walletType) {
+            console.log(`Connecting to ${walletType} wallet...`);
+            
+            // Close the dropdown first
+            const dropdown = document.getElementById('walletDropdown');
+            const button = document.getElementById('walletSigninBtn');
+            if (dropdown && button) {
+                dropdown.classList.remove('active');
+                button.classList.remove('active');
+                dropdownOpen = false;
+                document.removeEventListener('click', closeDropdownOnClickOutside);
+            }
+            
+            // Check if bloodFlow controller exists and connect wallet
+            if (window.bloodFlow && typeof window.bloodFlow.connectWallet === 'function') {
+                window.bloodFlow.connectWallet(walletType);
+            } else {
+                console.error('BloodFlowController not available. Redirecting to home page.');
+                // Fallback: redirect to home page which will trigger the auth flow
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // Initialize wallet auth elements when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is authenticated and update button text accordingly
+            const sessionAuth = sessionStorage.getItem('bloodAuth');
+            const sessionWallet = sessionStorage.getItem('bloodWallet');
+            const signinBtn = document.getElementById('walletSigninBtn');
+            const signinText = signinBtn?.querySelector('.signin-text');
+            
+            if (sessionAuth === 'true' && sessionWallet && signinText) {
+                try {
+                    const wallet = JSON.parse(sessionWallet);
+                    signinText.textContent = `${wallet.type.toUpperCase()}`;
+                    signinBtn.title = `Connected: ${wallet.address.slice(0, 6)}...${wallet.address.slice(-4)}`;
+                } catch (error) {
+                    console.error('Error parsing wallet data:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

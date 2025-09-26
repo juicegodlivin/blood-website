@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Documentation - AI Liquidation Tracker</title>
+    <meta name="description" content="Complete documentation for Blood AI liquidation tracker - monitor largest liquidations across highest volume markets">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="docs-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body class="docs-page">
+    <!-- Loading Screen (Hidden by default for authenticated users) -->
+    <div class="loading-screen hidden" id="loadingScreen">
+        <div class="loading-video-background">
+            <video autoplay muted loop>
+                <source src="Blood Background.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="loading-video-overlay"></div>
+        <div class="loading-container">
+            <div class="blood-drop-loader">
+                <div class="blood-drop"></div>
+                <div class="blood-drop"></div>
+                <div class="blood-drop"></div>
+            </div>
+            <div class="loading-text">BLOOD</div>
+            <div class="loading-subtitle">Accessing documentation...</div>
+            <div class="loading-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="loading-percentage" id="loadingPercentage">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authentication Screen (Hidden by default) -->
+    <div class="auth-screen hidden" id="authScreen">
+        <div class="auth-backdrop"></div>
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="auth-logo">B</div>
+                <h1 class="auth-title">WALLET CONNECTION</h1>
+                <p class="auth-subtitle">Select your blockchain interface to continue</p>
+            </div>
+            <div class="auth-body">
+                <div class="wallet-grid">
+                    <div class="wallet-card" data-wallet="phantom">
+                        <div class="wallet-card-inner">
+                            <img class="wallet-icon phantom-icon" src="phantom-wallet-logo.png" alt="Phantom Wallet" />
+                            <div class="wallet-info">
+                                <div class="wallet-name">PHANTOM</div>
+                                <div class="wallet-desc">SOL • PROTOCOL</div>
+                            </div>
+                            <div class="connect-text">CONNECT</div>
+                        </div>
+                    </div>
+                    <div class="wallet-card" data-wallet="solflare">
+                        <div class="wallet-card-inner">
+                            <img class="wallet-icon solflare-icon" src="solflare-wallet-logo.jpg" alt="Solflare Wallet" />
+                            <div class="wallet-info">
+                                <div class="wallet-name">SOLFLARE</div>
+                                <div class="wallet-desc">SOL • SECURE</div>
+                            </div>
+                            <div class="connect-text">CONNECT</div>
+                        </div>
+                    </div>
+                    <div class="wallet-card" data-wallet="metamask">
+                        <div class="wallet-card-inner">
+                            <img class="wallet-icon metamask-icon" src="metamask-wallet-logo.jpg" alt="MetaMask Wallet" />
+                            <div class="wallet-info">
+                                <div class="wallet-name">METAMASK</div>
+                                <div class="wallet-desc">ETH • EVM</div>
+                            </div>
+                            <div class="connect-text">CONNECT</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="auth-footer">
+                <p class="auth-disclaimer">
+                    🔒 SECURE & ENCRYPTED CONNECTION<br>
+                    NEVER STORE YOUR PRIVATE KEYS OR PERSONAL INFORMATION
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="Blood Background.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+    
+    <header class="header">
+        <nav class="nav" aria-label="Main navigation">
+            <div class="ca-section">
+                <button class="ca-button" id="tokenAddress" onclick="copyTokenAddress()">
+                    <span class="ca-label">CA:</span>
+                    <span class="ca-address">4x7B...9oP0</span>
+                    <span class="copy-icon">📋</span>
+                </button>
+            </div>
+            <div class="nav-brand">
+                <a href="index.html" class="logo">
+                    <img class="logo-icon" src="Blood Logo.png" alt="Blood Logo" />
+                    <span class="logo-text">BLOOD</span>
+                </a>
+            </div>
+            <ul class="nav-menu" role="menubar">
+                <li role="none">
+                    <a href="liquidations.html" class="nav-link" role="menuitem">Liquidations</a>
+                </li>
+                <li role="none">
+                    <a href="docs.html" class="nav-link active" role="menuitem">Integrate API</a>
+                </li>
+                <li role="none">
+                    <a href="https://x.com/erevos_ops" class="nav-link" role="menuitem" target="_blank" rel="noopener noreferrer">X Account</a>
+                </li>
+                <li role="none" class="wallet-dropdown-container">
+                    <button class="wallet-signin-btn" id="walletSigninBtn" onclick="toggleWalletDropdown()">
+                        <svg class="wallet-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 7H7V5C7 3.895 7.895 3 9 3H18C18.553 3 19 2.552 19 2C19 1.448 18.553 1 18 1H9C6.791 1 5 2.791 5 5V7H3C2.448 7 2 7.448 2 8V20C2 21.105 2.895 22 4 22H21C21.553 22 22 21.552 22 21V8C22 7.448 21.553 7 21 7ZM20 20H4V9H20V20Z" fill="currentColor"/>
+                            <circle cx="16" cy="14.5" r="1.5" fill="currentColor"/>
+                        </svg>
+                        <span class="signin-text">WALLET</span>
+                        <svg class="dropdown-arrow" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    
+                    <!-- Wallet Dropdown Menu -->
+                    <div class="wallet-dropdown" id="walletDropdown">
+                        <div class="wallet-dropdown-header">
+                            <h3 class="dropdown-title">CONNECT WALLET</h3>
+                            <p class="dropdown-subtitle">Choose your blockchain interface</p>
+                        </div>
+                        
+                        <div class="wallet-dropdown-body">
+                            <div class="wallet-dropdown-grid">
+                                <div class="wallet-dropdown-card" data-wallet="phantom" onclick="connectDropdownWallet('phantom')">
+                                    <img class="wallet-dropdown-icon" src="phantom-wallet-logo.png" alt="Phantom Wallet" />
+                                    <div class="wallet-dropdown-info">
+                                        <div class="wallet-dropdown-name">PHANTOM</div>
+                                        <div class="wallet-dropdown-desc">SOL • PROTOCOL</div>
+                                    </div>
+                                    <div class="dropdown-connect-text">CONNECT</div>
+                                </div>
+                                
+                                <div class="wallet-dropdown-card" data-wallet="solflare" onclick="connectDropdownWallet('solflare')">
+                                    <img class="wallet-dropdown-icon" src="solflare-wallet-logo.jpg" alt="Solflare Wallet" />
+                                    <div class="wallet-dropdown-info">
+                                        <div class="wallet-dropdown-name">SOLFLARE</div>
+                                        <div class="wallet-dropdown-desc">SOL • SECURE</div>
+                                    </div>
+                                    <div class="dropdown-connect-text">CONNECT</div>
+                                </div>
+                                
+                                <div class="wallet-dropdown-card" data-wallet="metamask" onclick="connectDropdownWallet('metamask')">
+                                    <img class="wallet-dropdown-icon" src="metamask-wallet-logo.jpg" alt="MetaMask Wallet" />
+                                    <div class="wallet-dropdown-info">
+                                        <div class="wallet-dropdown-name">METAMASK</div>
+                                        <div class="wallet-dropdown-desc">ETH • EVM</div>
+                                    </div>
+                                    <div class="dropdown-connect-text">CONNECT</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="wallet-dropdown-footer">
+                            <p class="dropdown-disclaimer">
+                                🔒 Secure & encrypted connection
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main docs-main" id="main">
+        <div class="docs-container">
+            <div class="docs-layout">
+                <nav class="docs-sidebar" aria-label="Documentation navigation">
+                    <div class="docs-nav-header">
+                        <h2 class="docs-nav-title">Navigation</h2>
+                    </div>
+                    <ul class="docs-nav-list">
+                        <li><a href="#overview" class="docs-nav-link">Overview</a></li>
+                        <li><a href="#integration" class="docs-nav-link">Integration</a></li>
+                        <li><a href="#trading-bots" class="docs-nav-link">Trading Bots</a></li>
+                        <li><a href="#auto-buyer" class="docs-nav-link">Auto Buyer</a></li>
+                        <li><a href="#api" class="docs-nav-link">API</a></li>
+                    </ul>
+                </nav>
+
+                <div class="docs-content">
+                    <div class="docs-header">
+                        <h1 class="docs-title">BLOOD Documentation</h1>
+                        <p class="docs-subtitle">AI Liquidation Tracker - Get your information exactly where you need it most</p>
+                    </div>
+                <section id="overview" class="docs-section">
+                    <h2 class="docs-section-title">Overview</h2>
+                    <p class="docs-text">
+                        Blood is an advanced AI-powered liquidation tracker that monitors the largest liquidations across 
+                        the highest volume cryptocurrency markets in real-time. Get critical market intelligence exactly 
+                        where you need it most for optimal trading decisions.
+                    </p>
+
+                    <div class="docs-warning">
+                        <h3>MARKET INTELLIGENCE</h3>
+                        <p>
+                            Blood tracks liquidations across major exchanges, providing instant alerts and analytics 
+                            to help you capitalize on market movements before the crowd catches on.
+                        </p>
+                    </div>
+
+                    <h3 class="docs-subsection-title">Key Features</h3>
+                    <ul class="docs-list">
+                        <li>Real-time liquidation monitoring across 50+ major exchanges</li>
+                        <li>AI-powered pattern recognition for liquidation cascades</li>
+                        <li>Instant notifications for large liquidation events</li>
+                        <li>Historical liquidation data and trend analysis</li>
+                        <li>Integration APIs for trading bots and algorithms</li>
+                        <li>Auto-buyer functionality for strategic positioning</li>
+                    </ul>
+
+                    <h3 class="docs-subsection-title">Supported Markets</h3>
+                    <p class="docs-text">
+                        Blood monitors liquidations across the highest volume markets:
+                    </p>
+                    <ul class="docs-list">
+                        <li><strong>Perpetual Futures:</strong> BTC, ETH, SOL, BNB, XRP, ADA, DOGE</li>
+                        <li><strong>Options:</strong> Major crypto options across Deribit and OKX</li>
+                        <li><strong>Spot Margin:</strong> High-volume spot margin positions</li>
+                        <li><strong>Cross-Exchange:</strong> Multi-exchange liquidation correlation tracking</li>
+                    </ul>
+                </section>
+
+                <section id="integration" class="docs-section">
+                    <h2 class="docs-section-title">Integration</h2>
+
+                    <h3 class="docs-subsection-title">Quick Setup</h3>
+                    <div class="code-block">
+                        <pre><code># Install Blood SDK
+npm install @blood/liquidation-tracker
+
+# Initialize with API key
+const Blood = require('@blood/liquidation-tracker');
+const tracker = new Blood({
+  apiKey: 'your-api-key-here',
+  environment: 'production'
+});
+
+# Start monitoring
+tracker.start();</code></pre>
+                    </div>
+
+                    <h3 class="docs-subsection-title">WebSocket Integration</h3>
+                    <p class="docs-text">
+                        Connect to Blood's real-time liquidation feed for instant market intelligence:
+                    </p>
+
+                    <div class="code-block">
+                        <pre><code># Connect to WebSocket feed
+const ws = new WebSocket('wss://api.blood.io/liquidations');
+
+ws.on('message', (data) => {
+  const liquidation = JSON.parse(data);
+  console.log(`Large liquidation detected: ${liquidation.amount} ${liquidation.symbol}`);
+  
+  // Process liquidation event
+  if (liquidation.amount > 1000000) {
+    handleLargeLiquidation(liquidation);
+  }
+});
+
+# Subscribe to specific markets
+ws.send(JSON.stringify({
+  action: 'subscribe',
+  markets: ['BTC-PERP', 'ETH-PERP', 'SOL-PERP']
+}));</code></pre>
+                    </div>
+
+                    <h3 class="docs-subsection-title">REST API Integration</h3>
+                    <p class="docs-text">
+                        Access historical liquidation data and analytics through our REST API:
+                    </p>
+
+                    <div class="code-block">
+                        <pre><code># Get recent large liquidations
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  "https://api.blood.io/v1/liquidations?size=large&timeframe=1h"
+
+# Get liquidation heatmap data
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  "https://api.blood.io/v1/heatmap?market=BTC-PERP&interval=15m"
+
+# Get liquidation cascade predictions
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  "https://api.blood.io/v1/predictions/cascades"</code></pre>
+                    </div>
+                </section>
+
+                <section id="trading-bots" class="docs-section">
+                    <h2 class="docs-section-title">Trading Bots</h2>
+
+                    <h3 class="docs-subsection-title">Bot Integration</h3>
+                    <p class="docs-text">
+                        Integrate Blood's liquidation intelligence directly into your trading bots for enhanced performance and strategic positioning:
+                    </p>
+
+                    <div class="code-block">
+                        <pre><code># Trading bot configuration with Blood integration
+const BloodBot = require('@blood/trading-bot');
+
+const bot = new BloodBot({
+  apiKey: 'your-blood-api-key',
+  exchange: 'binance', // or 'bybit', 'okx', etc.
+  strategy: 'liquidation-hunter',
+  riskManagement: {
+    maxPositionSize: 10000,
+    stopLoss: 0.02,
+    takeProfit: 0.05
+  }
+});
+
+# Configure liquidation-based triggers
+bot.on('largeLiquidation', (event) => {
+  if (event.amount > 5000000 && event.market === 'BTC-PERP') {
+    bot.execute('contrarian-entry', {
+      size: calculatePositionSize(event),
+      direction: opposite(event.side)
+    });
+  }
+});
+
+bot.start();</code></pre>
+                    </div>
+
+                    <h3 class="docs-subsection-title">Liquidation Strategies</h3>
+                    <div class="docs-info">
+                        <h4>PROVEN STRATEGIES</h4>
+                        <p>
+                            Blood provides battle-tested liquidation hunting strategies that capitalize on market inefficiencies 
+                            created by large liquidation events. These strategies have shown consistent profitability 
+                            across various market conditions.
+                        </p>
+                    </div>
+
+                    <div class="code-block">
+                        <pre><code># Liquidation cascade strategy
+const cascadeStrategy = {
+  name: 'cascade-hunter',
+  triggers: {
+    initialLiquidation: '>= 2000000', // $2M+ liquidation
+    cascadeThreshold: 0.75, // 75% confidence of cascade
+    timeWindow: 300 // 5 minutes
+  },
+  execution: {
+    entryType: 'limit',
+    slippage: 0.001,
+    positionSizing: 'kelly-criterion'
+  },
+  riskManagement: {
+    maxDrawdown: 0.05,
+    dynamicStopLoss: true,
+    trailingTakeProfit: true
+  }
+};
+
+bot.addStrategy(cascadeStrategy);</code></pre>
+                    </div>
+                </section>
+
+                <section id="auto-buyer" class="docs-section">
+                    <h2 class="docs-section-title">Auto Buyer</h2>
+
+                    <h3 class="docs-subsection-title">Automated Token Acquisition</h3>
+                    <div class="intelligence-sources-grid">
+                        <div class="source-item">
+                            <h4 class="source-title">Smart Buying</h4>
+                            <p class="source-description">AI-powered timing algorithms that execute Blood token purchases at optimal market conditions for maximum efficiency</p>
+                        </div>
+                        <div class="source-item">
+                            <h4 class="source-title">DCA Strategy</h4>
+                            <p class="source-description">Dollar-cost averaging with liquidation event triggers to accumulate Blood tokens during market volatility</p>
+                        </div>
+                        <div class="source-item">
+                            <h4 class="source-title">MEV Protection</h4>
+                            <p class="source-description">Advanced transaction routing and timing to protect against MEV attacks and ensure optimal execution prices</p>
+                        </div>
+                        <div class="source-item">
+                            <h4 class="source-title">Multi-DEX</h4>
+                            <p class="source-description">Cross-DEX arbitrage detection and execution across Uniswap, PancakeSwap, and other major decentralized exchanges</p>
+                        </div>
+                    </div>
+
+                    <h3 class="docs-subsection-title">Configuration Options</h3>
+                    <p class="docs-text">
+                        Configure the auto buyer to match your investment strategy and risk tolerance:
+                    </p>
+                    <ul class="docs-list">
+                        <li><strong>Budget Allocation:</strong> Set daily, weekly, or monthly purchase limits</li>
+                        <li><strong>Trigger Conditions:</strong> Buy on large liquidations, price dips, or time intervals</li>
+                        <li><strong>Slippage Tolerance:</strong> Maximum acceptable slippage for trades (0.1% - 5%)</li>
+                        <li><strong>Gas Optimization:</strong> Smart gas pricing to minimize transaction costs</li>
+                    </ul>
+
+                    <h3 class="docs-subsection-title">Setup Instructions</h3>
+                    <div class="code-block">
+                        <pre><code># Configure Blood auto buyer
+const autoBuyer = new BloodAutoBuyer({
+  wallet: 'your-wallet-address',
+  privateKey: process.env.PRIVATE_KEY,
+  budget: {
+    daily: 1000, // $1000 daily limit
+    perTrade: 100 // Max $100 per trade
+  },
+  triggers: {
+    largeLiquidation: true, // Buy on $5M+ liquidations
+    priceDrops: 0.05, // Buy on 5%+ drops
+    timeInterval: '4h' // Buy every 4 hours
+  },
+  slippage: 0.005, // 0.5% max slippage
+  gasStrategy: 'optimal'
+});
+
+autoBuyer.start();</code></pre>
+                    </div>
+                </section>
+
+                <section id="api" class="docs-section">
+                    <h2 class="docs-section-title">API Reference</h2>
+
+                    <h3 class="docs-subsection-title">Authentication</h3>
+                    <p class="docs-text">
+                        All API requests require a valid API key. Include your key in the Authorization header for all requests.
+                    </p>
+
+                    <div class="code-block">
+                        <pre><code># Get your API key from the dashboard
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  "https://api.blood.io/v1/liquidations"</code></pre>
+                    </div>
+
+                    <div class="api-endpoint">
+                        <h4 class="api-method">GET /v1/liquidations</h4>
+                        <p class="api-description">Get recent liquidation events with filtering options</p>
+                        <div class="code-block">
+                            <pre><code>{
+  "liquidations": [
+    {
+      "id": "liq_2024_001337",
+      "timestamp": "2024-12-15T14:23:17Z",
+      "exchange": "binance",
+      "market": "BTC-PERP",
+      "side": "long",
+      "amount": 2500000,
+      "price": 42350.50,
+      "cascade_probability": 0.85,
+      "market_impact": "high"
+    }
+  ],
+  "total": 156,
+  "page": 1,
+  "per_page": 50
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="api-endpoint">
+                        <h4 class="api-method">GET /v1/heatmap</h4>
+                        <p class="api-description">Get liquidation heatmap data for visualization</p>
+                        <div class="code-block">
+                            <pre><code>{
+  "heatmap": {
+    "market": "BTC-PERP",
+    "levels": [
+      {
+        "price": 42000,
+        "long_liquidations": 15000000,
+        "short_liquidations": 8000000,
+        "total_liquidations": 23000000
+      }
+    ],
+    "current_price": 42350.50,
+    "danger_zones": ["41800-42000", "43200-43500"]
+  }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="api-endpoint">
+                        <h4 class="api-method">POST /v1/alerts</h4>
+                        <p class="api-description">Create custom liquidation alerts</p>
+                        <div class="code-block">
+                            <pre><code>{
+  "alert": {
+    "name": "Large BTC Liquidations",
+    "conditions": {
+      "market": "BTC-PERP",
+      "min_amount": 5000000,
+      "cascade_probability": ">= 0.75"
+    },
+    "notification": {
+      "webhook": "https://your-bot.com/webhook",
+      "email": "trader@yourcompany.com"
+    }
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">BLOOD</span>
+                    <p class="footer-description">
+                        AI Liquidation Tracker - Monitor the largest liquidations across highest volume markets
+                    </p>
+                </div>
+
+                <nav class="footer-nav" aria-label="Footer navigation">
+                    <div class="footer-section">
+                        <h3 class="footer-section-title">Platform</h3>
+                        <ul class="footer-links">
+                            <li><a href="docs.html" class="footer-link">Documentation</a></li>
+                            <li><a href="liquidations.html" class="footer-link">Live Liquidations</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h3 class="footer-section-title">Tools</h3>
+                        <ul class="footer-links">
+                            <li><a href="#trading-bots" class="footer-link">Trading Bots</a></li>
+                            <li><a href="#auto-buyer" class="footer-link">Auto Buyer</a></li>
+                            <li><a href="#api" class="footer-link">API</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="copyright">
+                    BLOOD v1.0.0 // AI-POWERED LIQUIDATION INTELLIGENCE // REAL-TIME MARKET MONITORING
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    
+    <script>
+        // Wallet Dropdown Control for Docs Page
+        let dropdownOpen = false;
+        
+        function toggleWalletDropdown() {
+            console.log('Toggling wallet dropdown...');
+            
+            const dropdown = document.getElementById('walletDropdown');
+            const button = document.getElementById('walletSigninBtn');
+            
+            if (!dropdown || !button) {
+                console.error('Dropdown elements not found');
+                return;
+            }
+            
+            dropdownOpen = !dropdownOpen;
+            
+            if (dropdownOpen) {
+                dropdown.classList.add('active');
+                button.classList.add('active');
+                // Close dropdown when clicking outside
+                setTimeout(() => {
+                    document.addEventListener('click', closeDropdownOnClickOutside);
+                }, 100);
+            } else {
+                dropdown.classList.remove('active');
+                button.classList.remove('active');
+                document.removeEventListener('click', closeDropdownOnClickOutside);
+            }
+        }
+        
+        function closeDropdownOnClickOutside(event) {
+            const dropdown = document.getElementById('walletDropdown');
+            const button = document.getElementById('walletSigninBtn');
+            const container = dropdown?.closest('.wallet-dropdown-container');
+            
+            if (container && !container.contains(event.target)) {
+                dropdown.classList.remove('active');
+                button.classList.remove('active');
+                dropdownOpen = false;
+                document.removeEventListener('click', closeDropdownOnClickOutside);
+            }
+        }
+        
+        function connectDropdownWallet(walletType) {
+            console.log(`Connecting to ${walletType} wallet...`);
+            
+            // Close the dropdown first
+            const dropdown = document.getElementById('walletDropdown');
+            const button = document.getElementById('walletSigninBtn');
+            if (dropdown && button) {
+                dropdown.classList.remove('active');
+                button.classList.remove('active');
+                dropdownOpen = false;
+                document.removeEventListener('click', closeDropdownOnClickOutside);
+            }
+            
+            // Check if bloodFlow controller exists and connect wallet
+            if (window.bloodFlow && typeof window.bloodFlow.connectWallet === 'function') {
+                window.bloodFlow.connectWallet(walletType);
+            } else {
+                console.error('BloodFlowController not available. Redirecting to home page.');
+                // Fallback: redirect to home page which will trigger the auth flow
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // Initialize wallet auth elements when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is authenticated and update button text accordingly
+            const sessionAuth = sessionStorage.getItem('bloodAuth');
+            const sessionWallet = sessionStorage.getItem('bloodWallet');
+            const signinBtn = document.getElementById('walletSigninBtn');
+            const signinText = signinBtn?.querySelector('.signin-text');
+            
+            if (sessionAuth === 'true' && sessionWallet && signinText) {
+                try {
+                    const wallet = JSON.parse(sessionWallet);
+                    signinText.textContent = `${wallet.type.toUpperCase()}`;
+                    signinBtn.title = `Connected: ${wallet.address.slice(0, 6)}...${wallet.address.slice(-4)}`;
+                } catch (error) {
+                    console.error('Error parsing wallet data:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
